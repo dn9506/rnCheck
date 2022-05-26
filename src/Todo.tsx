@@ -1,20 +1,26 @@
 import React from "react";
-import { Text, View,StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 
-export const Todo = ({todo}) =>{
+interface ITodo {
+    todo: string,
+    key: string,
+        
+}
+
+export const Todo:React.FC<ITodo> = ({ todo }) => {
     return (<View style={styles.todo}>
-        <Text>{todo.title}</Text>
+        <Text>{todo}</Text>
     </View>)
 }
 
 const styles = StyleSheet.create({
     todo: {
-        flexDirection:"row",
+        flexDirection: "row",
         alignItems: "center",
         padding: 15,
         borderWidth: 1,
         borderColor: '#eee',
         borderRadius: 5,
-        marginBottom:10
+        marginBottom: 10
     }
 })
