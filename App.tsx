@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, Text, View, FlatList, Alert } from "react-native";
 import { Navbar } from "./src/components/Navbar";
 import { MainScreen } from "./src/screens/MainScreen";
 import { TodoScreen } from "./src/screens/TodoScreen";
@@ -27,7 +27,26 @@ export default function App() {
   };
 
   const removeTodo = (id: string) => {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    const todo = todos.find((t) => t.id === id);
+
+    Alert.alert(
+      "Delete",
+      `Are you sure wont to delete ${todo?.title}?`,
+      [
+        {
+          text: "Delete",
+          onPress: () => {
+            setTodoId('0');
+            setTodos((prev) => prev.filter((todo) => todo.id !== id));
+          },
+        },
+        {
+          text: "Cansel",
+          style: "cancel",
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   let content = (
@@ -41,7 +60,7 @@ export default function App() {
 
   if (todoId.toString() !== "0".toString()) {
     const selectedTodo = todos.find((todo) => todo.id === todoId)!;
-    content = <TodoScreen goBack={() => setTodoId("0")} todo={selectedTodo} />;
+    content = <TodoScreen goBack={() => setTodoId("0")} todo={selectedTodo} onRemove={removeTodo}/>;
   }
 
   return (

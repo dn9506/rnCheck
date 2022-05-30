@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TextInput, Button, Alert } from "react-native";
+import { THEME } from "../theme";
 
 interface IAddTodo {
   onSubmit: (title: string) => void;
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     width: "70%",
     borderStyle: "solid",
     borderBottomWidth: 2,
-    borderBottomColor: "#3949ab",
+    borderBottomColor: THEME.MAIN_COLOR,
     padding: 10,
   },
 });
