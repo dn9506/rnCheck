@@ -16,7 +16,7 @@ export const Todo: React.FC<ITodo> = ({ id, title, onRemove, onOpen }) => {
       onLongPress={onRemove.bind(null, id)}
     >
       <View style={styles.todo}>
-        <Text style={styles.title}>{title}</Text>
+        <Text >{title}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -32,7 +32,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
   },
-  title: {
-    fontFamily: "roboto-bolt",
-  },
+  
 });
