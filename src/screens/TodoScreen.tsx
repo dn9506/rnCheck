@@ -7,22 +7,38 @@ interface ITodoScreen {
   goBack: () => void;
   onRemove: (id: string) => void;
   todo: { id: string; title: string };
+  onSave: (id: string, title: string) => void;
 }
 
 export const TodoScreen: React.FC<ITodoScreen> = ({
   goBack,
   todo,
   onRemove,
+  onSave,
 }) => {
   const [modal, setModal] = useState(false);
 
+  const changeStateModal = () => {
+    modal ? setModal(false) : setModal(true);
+  };
+
+  const saveHandler = (value: string) => {
+    onSave(todo.id, value);
+    changeStateModal();
+  }
+
   return (
     <View>
-      <EditModal visible={modal} onCansel = {setModal(false)}/>
+      <EditModal
+        value={todo.title}
+        visible={modal}
+        onCansel={changeStateModal}
+        onSave={saveHandler}
+      />
 
       <AppCard style={styles.card}>
         <Text style={styles.title}>{todo.title}</Text>
-        <Button title="Change" />
+        <Button title="Change" onPress={changeStateModal} />
       </AppCard>
 
       <View style={styles.buttons}>

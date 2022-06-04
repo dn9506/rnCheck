@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, FlatList, Alert } from "react-native";
+import * as Font from "expo-font";
+import AppLoading from "expo-app-loading";
 import { Navbar } from "./src/components/Navbar";
 import { MainScreen } from "./src/screens/MainScreen";
 import { TodoScreen } from "./src/screens/TodoScreen";
@@ -8,14 +10,31 @@ interface ITodos {
   id: string;
   title: string;
 }
+
+async function loadAsync() {
+  await Font.loadAsync({
+    "roboto-regular": require("./assets/fonts/Roboto-Regular.ttf"),
+    "roboto-bolt": require("./assets/fonts/Roboto-Bold.ttf"),
+  });
+}
+
 export default function App() {
+  const [isReady, setIsReady] = useState(false);
   const [todoId, setTodoId] = useState("0");
   const [todos, setTodos] = useState<ITodos[]>([
     { id: "1", title: "111111111" },
-    { id: "2", title: "222222222" },
-    { id: "3", title: "333333333" },
-    { id: "4", title: "444444444" },
   ]);
+
+  if (!isReady) {
+    return (
+      <AppLoading
+        startAsync={loadAsync}
+        onError={error=> console.log(error)}
+        onFinish={() => setIsReady(true)}
+      />
+    );
+  }
+
   const addTodo = (title: string) => {
     setTodos((prev) => [
       ...prev,
@@ -36,7 +55,7 @@ export default function App() {
         {
           text: "Delete",
           onPress: () => {
-            setTodoId('0');
+            setTodoId("0");
             setTodos((prev) => prev.filter((todo) => todo.id !== id));
           },
         },
@@ -46,6 +65,16 @@ export default function App() {
         },
       ],
       { cancelable: false }
+    );
+  };
+  const updateTodo = (id: string, title: string) => {
+    setTodos((old) =>
+      old.map((todo) => {
+        if (todo.id === id) {
+          todo.title = title;
+        }
+        return todo;
+      })
     );
   };
 
@@ -60,7 +89,14 @@ export default function App() {
 
   if (todoId.toString() !== "0".toString()) {
     const selectedTodo = todos.find((todo) => todo.id === todoId)!;
-    content = <TodoScreen goBack={() => setTodoId("0")} todo={selectedTodo} onRemove={removeTodo}/>;
+    content = (
+      <TodoScreen
+        goBack={() => setTodoId("0")}
+        todo={selectedTodo}
+        onRemove={removeTodo}
+        onSave={updateTodo}
+      />
+    );
   }
 
   return (
